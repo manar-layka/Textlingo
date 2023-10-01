@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Happy Translation!</h1>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card translation-form">
+          <div class="card-header">
+            <h2 class="card-title">Translate Text</h2>
+          </div>
+          <div class="card-body">
+            <form method="POST" action="{% url 'translator:translation-post' %}">
+              {% csrf_token %}
+              <div class="form-group">
+                <label for="content_type">Content Type:</label>
+                <select class="form-control" name="content_type" id="content_type">
+                  <option value="HTML">HTML</option>
+                  <option value="plain text">Plain Text</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="original_text">Original Text:</label>
+                <textarea class="form-control" name="original_text" id="original_text" rows="5" cols="40"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Translate</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        {% if request.method == 'POST' %}
+        <div class="card result mt-4">
+          <div class="card-header">
+            <h2 class="card-title">Translated Text</h2>
+          </div>
+          <div class="card-body">
+            <div class="translation-item">
+              <div class="original-text-label">Original Text:</div>
+              <div class="original-text">{{ data.data.original_text|safe }}</div>
+              <div class="translated-text-label">Translated Text:</div>
+              <div class="translated-text">{{ data.data.translated_text|safe }}</div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h1>User Registration</h1>
+                <form method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter a username.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid email address.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Please enter a password.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password:</label>
+                        <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
+                        <div class="invalid-feedback">
+                            Passwords do not match.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+                {% if data.errors %}
+                <div class="alert alert-danger mt-3">
+                    <h4>Error(s):</h4>
+                    <ul>
+                        {% for field, field_errors in data.errors.items %}
+                            <li>{{ field }}: {{ field_errors.0 }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add JavaScript validation for username, email, and password matching
+        document.addEventListener('DOMContentLoaded', function() {
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirm_password');
+
+            // Function to clear error messages
+            function clearErrors() {
+                username.setCustomValidity('');
+                email.setCustomValidity('');
+                password.setCustomValidity('');
+                confirmPassword.setCustomValidity('');
+            }
+
+            // Clear errors on page load/reload
+            clearErrors();
+
+            confirmPassword.addEventListener('input', function() {
+                if (confirmPassword.value === password.value) {
+                    confirmPassword.setCustomValidity('');
+                } else {
+                    confirmPassword.setCustomValidity('Passwords do not match');
+                }
+            });
+
+            username.addEventListener('input', function() {
+                if (username.value.trim() === '') {
+                    username.setCustomValidity('Please enter a username');
+                } else {
+                    username.setCustomValidity('');
+                }
+            });
+
+            email.addEventListener('input', function() {
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailPattern.test(email.value)) {
+                    email.setCustomValidity('Please enter a valid email address');
+                } else {
+                    email.setCustomValidity('');
+                }
+            });
+        });
+    </script>
+{% endblock %}

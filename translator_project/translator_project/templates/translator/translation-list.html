@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mt-4">Your Translations: </h1>
+
+    {% if request.method == 'GET' %}
+    <div class="mt-4">
+      <div class="card translation-list">
+        <div class="card-header">
+          <h2 class="card-title">List of Translations</h2>
+        </div>
+        <div class="card-body">
+          {% for translation in data.data %}
+          <div class="translation-item">
+            <div class="content-type">{{ translation.content_type }}</div>
+            <div class="original-text">{{ translation.original_text|safe }}</div>
+            <div class="translated-text">{{ translation.translated_text|safe }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {% if data.previous %}
+            <li class="page-item">
+              <a class="page-link" href="{{ data.previous }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+          {% endif %}
+
+          {% if data.next %}
+            <li class="page-item">
+              <a class="page-link" href="{{ data.next }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+    {% endif %}
+  </div>
+{% endblock %}
+

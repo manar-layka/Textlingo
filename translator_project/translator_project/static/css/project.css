@@ -1,0 +1,131 @@
+/* These styles are generated from project.scss. */
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.top-image {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.center-image {
+  display: block;
+  margin: 0 auto;
+}
+
+.about-us-image {
+  width: 400px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  margin-top: 0;
+  margin-bottom: 40px;
+}
+
+.about-us {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*justify-content: center;*/
+  min-height: 100vh;
+}
+
+.box {
+  /*border: 2px solid #333;*/
+  padding: 20px;
+  width: 500px;
+  margin: 0 auto;
+}
+
+.login-container, .registration-container {
+  text-align: center;
+  margin: 20px;
+}
+
+.login-form, .registration-form {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+
+.translation-form {
+  margin-bottom: 20px;
+}
+
+.result {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.translation-list {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Style individual translation items */
+.translation-item {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #fff;
+}
+
+/* Style original text */
+.original-text {
+    font-weight: bold;
+}
+
+/* Style translated text */
+.translated-text {
+    color: #007bff; /* Blue color for translated text */
+}
+
+.textlingo-image {
+  max-height: 40px; /* Adjust the height as needed */
+  width: auto; /* Allow the width to adjust proportionally */
+  margin: 0; /* Remove any default margin */
+  padding: 0; /* Remove any default padding */
+  display: block; /* Ensure it's a block-level element */
+}

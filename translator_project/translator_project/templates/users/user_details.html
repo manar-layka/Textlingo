@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+
+  {{ data.username }} Profile
+
+{% endblock title %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <h2>
+
+
+          {{ data.username }}
+
+        </h2>
+        {% if object.name %}
+          <p>{{ data.name }}</p>
+        {% endif %}
+      </div>
+    </div>
+    {% if data.username == request.user.username %}
+      <!-- Action buttons -->
+      <div class="row">
+        <div class="col-sm-12">
+          <a class="btn btn-primary" href="{% url 'users:update' data.username %}" role="button">My Info</a>
+          <a class="btn btn-primary"
+             href="{% url 'account_email' %}"
+             role="button">E-Mail</a>
+          <!-- Your Stuff: Custom user template urls -->
+        </div>
+      </div>
+      <!-- End Action buttons -->
+    {% endif %}
+    {% if data.message %}
+      <div class="alert alert-dismissible {% if data.message.tags %}alert-{{ data.message.tags }}{% endif %}">
+        {{ data.message }}
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+      </div>
+    {% endif %}
+  </div>
+{% endblock content %}

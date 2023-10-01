@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static i18n %}
+<body>
+    <header class="header">
+        <h1 class="header-title">Translator App</h1>
+        <p class="header-description">Translate text easily with our app!</p>
+    </header>
+
+    <main class="main">
+      <section class="top-image">
+            <img src="{% static 'images/translator-image.jpg' %}" alt="Translator Image" class="center-image">
+        </section>
+        <section class="translation">
+            <h2 class="translation-title">Translate Text</h2>
+            <form class="translation-form" method="post" action="{% url 'translator:translation' %}">
+                {% csrf_token %}
+                <textarea class="translation-input" name="text" placeholder="Enter text to translate"></textarea>
+                <button class="translation-button" type="submit">Translate</button>
+            </form>
+            <div class="translation-result">
+                <!-- Display translation result here -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2023 Translator App</p>
+    </footer>
+</body>
