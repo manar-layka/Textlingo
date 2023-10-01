@@ -4,7 +4,7 @@
 ![Alt text](translator_project/translator_project/static/images/translator-image.jpg)
 
 
-## What can do:
+## What I can do:
 - **Text Translation**: Receive input text, translate it using [googletrans](https://pypi.org/project/googletrans/) third-party app which use **google-translate** third-party API, and return the translated text to the user.
 - **Content Type Specification**: Users can specify the content type of the input text (e.g., HTML, plain text)
 - **HTML Handling**: When the input text is in HTML format, preserve all outer tags (such as h1, h2, p, etc.), while translating only the inner text portions. This ensures that the document structure remains intact.
