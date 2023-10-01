@@ -1,6 +1,7 @@
-# A Django API that performs text translation for both HTML and plain text inputs. 
+#Textlingo
+### A Django API that performs text translation for both HTML and plain text inputs. 
 
-![Alt text](translator_project/static/images/translator-image.jpg)
+![Alt text](translator_project/translator_project/static/images/translator-image.jpg)
 
 
 ## What can do:
