@@ -55,8 +55,8 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
 
                 for element in soup.find_all():
                     if element.string:
-                        translated_element = translator.translate(element.string, dest="en")
-                        element.string = translated_element.text
+                        translated_element = translator.translate(element.string, dest="en").text
+                        element.string.replace_with(translated_element)
 
                 translated_html = str(soup)
                 translated_text = translated_html
