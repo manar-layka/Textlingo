@@ -36,6 +36,17 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
     def get_queryset(self):
         return Translation.objects.filter(user_id=self.request.user.pk)
 
+    def translate_recursive(self, element, translator):
+        if element.name is None:
+            translated_text = translator.translate(element, dest="en").text
+            element.replace_with(translated_text)
+        else:
+            for child in element.contents:
+                try:
+                    self.translate_recursive(child, translator)
+                except IndexError:
+                    pass
+
     def create(self, request, *args, **kwargs):
 
         serializer = self.get_serializer(data=request.data)
@@ -53,10 +64,7 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
             if content_type == "HTML":
                 soup = BeautifulSoup(original_text, "html.parser")
 
-                for element in soup.find_all():
-                    if element.string:
-                        translated_element = translator.translate(element.string, dest="en").text
-                        element.string.replace_with(translated_element)
+                self.translate_recursive(soup, translator)
 
                 translated_html = str(soup)
                 translated_text = translated_html
