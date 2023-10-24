@@ -1,8 +1,11 @@
+import html
 from unittest.mock import patch
 
+from bs4 import BeautifulSoup
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from googletrans import Translator
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -49,7 +52,7 @@ class TranslationCreateAPITestCase(TestCase):
         translation_exists = Translation.objects.filter(user=self.user).exists()
         self.assertTrue(translation_exists)
 
-    def test_create_translation_from_existed_one_html(self):
+    def test_create_translation_from_existed_html_translation(self):
         translation_data = {
             "content_type": "HTML",
             "original_text": "<p>Hallo, wie geht's ?!</p>",
@@ -66,10 +69,9 @@ class TranslationCreateAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("translated_text", response.data)
         self.assertEqual(response.data["translated_text"], "<p>Hello, how are you ?!</p>")
-        translation_exists = Translation.objects.filter(user=self.user).exists()
-        self.assertTrue(translation_exists)
+        self.assertTrue(Translation.objects.filter(user=self.user).exists())
 
-    def test_create_translation_from_existed_plain_text(self):
+    def test_create_translation_from_existed_plain_text_translation(self):
         translation_data = {
             "content_type": "plain text",
             "original_text": "Hallo, wie geht's ?!",
@@ -87,9 +89,7 @@ class TranslationCreateAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("translated_text", response.data)
         self.assertEqual(response.data["translated_text"], "Hello, how are you ?!")
-
-        translation_exists = Translation.objects.filter(user=self.user).exists()
-        self.assertTrue(translation_exists)
+        self.assertTrue(Translation.objects.filter(user=self.user).exists())
 
     def test_create_translation_invalid_content_type(self):
         invalid_translation_data = {

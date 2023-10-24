@@ -33,8 +33,11 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
 
     def translate_recursive(self, element, translator, translation_cache):
         if element.name is None:
+            existed_translation = Translation.objects.filter(original_text=element).first()
             if element in translation_cache:
                 element.replace_with(translation_cache[element])
+            elif existed_translation:
+                element.replace_with(existed_translation.translated_text)
             else:
                 translated_text = translator.translate(element, dest="en").text
                 translation_cache[element] = translated_text
