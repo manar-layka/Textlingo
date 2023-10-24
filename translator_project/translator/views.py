@@ -1,4 +1,3 @@
-# translations/api/views.py
 import requests
 from bs4 import BeautifulSoup
 from googletrans import Translator
@@ -12,7 +11,6 @@ from rest_framework.response import Response
 from .models import Translation
 from .serializers import TranslationSerializer
 
-
 class TransactionsTemplateHTMLRender(TemplateHTMLRenderer):
     def get_template_context(self, data, renderer_context):
         data = super().get_template_context(data, renderer_context)
@@ -21,34 +19,32 @@ class TransactionsTemplateHTMLRender(TemplateHTMLRenderer):
         else:
             return {"data": data}
 
-
 class TranslationCreateAPI(viewsets.ModelViewSet):
     queryset = Translation.objects.all()
     serializer_class = TranslationSerializer
-    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    renderer_classes = (
-        JSONRenderer,
-        TransactionsTemplateHTMLRender,
-    )
+    renderer_classes = (JSONRenderer, TransactionsTemplateHTMLRender,)
     template_name = "translator/translation.html"
 
     def get_queryset(self):
         return Translation.objects.filter(user_id=self.request.user.pk)
 
-    def translate_recursive(self, element, translator):
+    def translate_recursive(self, element, translator, translation_cache):
         if element.name is None:
-            translated_text = translator.translate(element, dest="en").text
-            element.replace_with(translated_text)
+            if element in translation_cache:
+                element.replace_with(translation_cache[element])
+            else:
+                translated_text = translator.translate(element, dest="en").text
+                translation_cache[element] = translated_text
+                element.replace_with(translated_text)
         else:
             for child in element.contents:
                 try:
-                    self.translate_recursive(child, translator)
+                    self.translate_recursive(child, translator, translation_cache)
                 except IndexError:
                     pass
 
     def create(self, request, *args, **kwargs):
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -60,12 +56,11 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
 
         try:
             translator = Translator()
+            translation_cache = {}  # Create a translation cache
 
             if content_type == "HTML":
                 soup = BeautifulSoup(original_text, "html.parser")
-
-                self.translate_recursive(soup, translator)
-
+                self.translate_recursive(soup, translator, translation_cache)
                 translated_html = str(soup)
                 translated_text = translated_html
             else:
