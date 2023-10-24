@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from .models import Translation
 from .serializers import TranslationSerializer
 
+
 class TransactionsTemplateHTMLRender(TemplateHTMLRenderer):
     def get_template_context(self, data, renderer_context):
         data = super().get_template_context(data, renderer_context)
@@ -18,6 +19,7 @@ class TransactionsTemplateHTMLRender(TemplateHTMLRenderer):
             return {}
         else:
             return {"data": data}
+
 
 class TranslationCreateAPI(viewsets.ModelViewSet):
     queryset = Translation.objects.all()
