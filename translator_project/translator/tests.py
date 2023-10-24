@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -44,6 +46,48 @@ class TranslationCreateAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertIn("translated_text", response.data)
         self.assertEqual(response.data["translated_text"], "Hello, how are you ?!")
+        translation_exists = Translation.objects.filter(user=self.user).exists()
+        self.assertTrue(translation_exists)
+
+    def test_create_translation_from_existed_one_html(self):
+        translation_data = {
+            "content_type": "HTML",
+            "original_text": "<p>Hallo, wie geht's ?!</p>",
+        }
+        Translation.objects.create(
+            user=self.user,
+            content_type="HTML",
+            original_text=translation_data["original_text"],
+            translated_text="<p>Hello, how are you ?!</p>",
+        )
+        with patch("googletrans.Translator.translate") as mock_translate:
+            response = self.client.post(self.create_url, translation_data, format="json")
+            mock_translate.assert_not_called()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("translated_text", response.data)
+        self.assertEqual(response.data["translated_text"], "<p>Hello, how are you ?!</p>")
+        translation_exists = Translation.objects.filter(user=self.user).exists()
+        self.assertTrue(translation_exists)
+
+    def test_create_translation_from_existed_plain_text(self):
+        translation_data = {
+            "content_type": "plain text",
+            "original_text": "Hallo, wie geht's ?!",
+        }
+        Translation.objects.create(
+            user=self.user,
+            content_type="plain text",
+            original_text=translation_data["original_text"],
+            translated_text="Hello, how are you ?!",
+        )
+        with patch("googletrans.Translator.translate") as mock_translate:
+            response = self.client.post(self.create_url, translation_data, format="json")
+            mock_translate.assert_not_called()
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("translated_text", response.data)
+        self.assertEqual(response.data["translated_text"], "Hello, how are you ?!")
+
         translation_exists = Translation.objects.filter(user=self.user).exists()
         self.assertTrue(translation_exists)
 

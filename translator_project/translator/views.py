@@ -71,7 +71,6 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         try:
-            print("rrr")
             translator = Translator()
             translation_cache = {}
 
