@@ -56,9 +56,24 @@ class TranslationCreateAPI(viewsets.ModelViewSet):
         if content_type not in ["HTML", "plain text"]:
             return Response({"detail": "Invalid content_type"}, status=status.HTTP_400_BAD_REQUEST)
 
+        existed_translation = Translation.objects.filter(original_text=original_text).first()
+        if existed_translation:
+            translation = Translation(
+                user=request.user,
+                content_type=content_type,
+                original_text=original_text,
+            )
+            translation.translated_text = existed_translation.translated_text
+            translation.save()
+            serializer = self.get_serializer(translation)
+            if request.accepted_renderer.format == "html":
+                return Response({"data": serializer.data}, template_name=self.template_name)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         try:
+            print("rrr")
             translator = Translator()
-            translation_cache = {}  # Create a translation cache
+            translation_cache = {}
 
             if content_type == "HTML":
                 soup = BeautifulSoup(original_text, "html.parser")
